@@ -3,6 +3,7 @@ import Container from "../components/Container";
 import ProductCard from "../components/ProductCard";
 import { fetchShirts } from "../api/shirtsApi";
 
+
 export default function Shop() {
   const [products, setProducts] = useState([]);
   const [q, setQ] = useState("");
