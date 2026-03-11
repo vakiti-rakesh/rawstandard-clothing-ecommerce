@@ -7,14 +7,26 @@ export default function FeaturedProducts() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/shirts`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data.slice(0, 3));
-      })
-      .catch((err) => {
+    async function loadProducts() {
+      try {
+        if (!API_BASE_URL) {
+          throw new Error("VITE_API_BASE_URL is not defined");
+        }
+
+        const res = await fetch(`${API_BASE_URL}/api/shirts`);
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch featured products: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data.slice(0, 3) : []);
+      } catch (err) {
         console.error("Failed to load featured products:", err);
-      });
+      }
+    }
+
+    loadProducts();
   }, []);
 
   return (
