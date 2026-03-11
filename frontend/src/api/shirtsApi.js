@@ -1,5 +1,5 @@
 // src/api/shirtsApi.js
-const BASE_URL = "http://localhost:8081/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function fetchShirts() {
   const res = await fetch(`${BASE_URL}/shirts`);
