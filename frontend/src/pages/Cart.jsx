@@ -62,36 +62,37 @@ export default function Cart() {
   }
 
   async function onCheckout() {
-    try {
-      if (cart.length === 0) return;
+  try {
+    if (cart.length === 0) return;
 
-      setLoading(true);
-      const items = cart.map((i) => ({
-        shirtId: i.shirtId,
-        size: i.size,
-        quantity: Number(i.quantity),
-      }));
+    setLoading(true);
 
-      const res = await checkout(items);
-      clearCart();
-      setCart([]);
+    const items = cart.map((i) => ({
+      shirtId: i.shirtId,
+      size: i.size,
+      quantity: Number(i.quantity),
+    }));
 
-      // go to success page with summary
-      navigate("/order-success", {
-        state: {
-          orderId: res.orderId,
-          items,
-          subtotal,
-          shipping,
-          grandTotal,
-        },
-      });
-    } catch (e) {
-      setToast({ msg: e.message || "Checkout failed", type: "error" });
-    } finally {
-      setLoading(false);
-    }
+    const res = await checkout({ items });
+
+    clearCart();
+    setCart([]);
+
+    navigate("/order-success", {
+      state: {
+        orderId: res.orderId,
+        items,
+        subtotal,
+        shipping,
+        grandTotal,
+      },
+    });
+  } catch (e) {
+    setToast({ msg: e.message || "Checkout failed", type: "error" });
+  } finally {
+    setLoading(false);
   }
+}
 
   return (
     <div style={styles.wrap}>
